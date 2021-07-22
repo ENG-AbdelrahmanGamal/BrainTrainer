@@ -28,7 +28,7 @@ int numberOfQuestion=0;
 @SuppressLint("SetTextI18n")
 public void newQuestion()
 {
-    sound();
+    MediaPlayer mediaPlayer= MediaPlayer.create(getApplicationContext(),R.raw.counter);
     tryAgainButton.setVisibility(View.INVISIBLE);
     resultTextView.setVisibility(View.VISIBLE);
     ArrayList<Integer>answer=new ArrayList<>();
@@ -121,7 +121,6 @@ public void newQuestion()
             @Override
             public void onTick(long millisUntilFinished) {
                 timerTextView.setText( String.valueOf(millisUntilFinished/1000+"S"));
-
             }
 
 
@@ -138,8 +137,8 @@ public void newQuestion()
     }
     public void sound()
     {
-        MediaPlayer mediaPlayer= MediaPlayer.create(getApplicationContext(),R.raw.counter);
-        mediaPlayer.start();
+       // MediaPlayer mediaPlayer= MediaPlayer.create(getApplicationContext(),R.raw.counter);
+
 
     }
 }
