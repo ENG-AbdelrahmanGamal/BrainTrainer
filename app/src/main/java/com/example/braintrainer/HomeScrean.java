@@ -1,13 +1,17 @@
 package com.example.braintrainer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,12 +27,35 @@ TextView timerTextView,scoreTextView,functionTextView ,resultTextView;
     private static final String TAG = "HomeScrean";
     int correctLocation;
     int score=0;
+    int timeri1=30100;
+    int Timeri2=1000;
 int numberOfQuestion=0;
 
-@SuppressLint("SetTextI18n")
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishActivityFromChild(HomeScrean.this,1);
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(timeri1!=0){
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            return false; //I have tried here true also
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    else {
+        return true;
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
 public void newQuestion()
 {
-    MediaPlayer mediaPlayer= MediaPlayer.create(getApplicationContext(),R.raw.counter);
+
     tryAgainButton.setVisibility(View.INVISIBLE);
     resultTextView.setVisibility(View.VISIBLE);
     ArrayList<Integer>answer=new ArrayList<>();
@@ -99,7 +126,8 @@ public void newQuestion()
         timerTextView=findViewById(R.id.textView_Timer);
         tryAgainButton=findViewById(R.id.againPlay_button);
         newQuestion();
-        timer(30100,1000);
+        timer(timeri1,Timeri2);
+        sound();
 
     }
 
@@ -107,11 +135,18 @@ public void newQuestion()
     public void tryAgain(View view) {
     score=0;
     numberOfQuestion=0;
-    scoreTextView.setText(score+"/"+numberOfQuestion);
+    resultTextView.setText("correct");
+        sound();
+
+        scoreTextView.setText(score+"/"+numberOfQuestion);
         resultTextView.setVisibility(View.INVISIBLE);
         tryAgainButton.setVisibility(View.INVISIBLE);
-        timer(30100,1000);
+        timer(timeri1,Timeri2);
         newQuestion();
+        button0.setVisibility(View.VISIBLE);
+        button1.setVisibility(View.VISIBLE);
+        button2.setVisibility(View.VISIBLE);
+        button3.setVisibility(View.VISIBLE);
 
     }
 
@@ -121,13 +156,20 @@ public void newQuestion()
             @Override
             public void onTick(long millisUntilFinished) {
                 timerTextView.setText( String.valueOf(millisUntilFinished/1000+"S"));
+
             }
 
 
             @Override
             public void onFinish() {
+                soundFinish();
                 resultTextView.setText("Hey Time Finish ");
                 tryAgainButton.setVisibility(View.VISIBLE);
+                button0.setVisibility(View.INVISIBLE);
+                button1.setVisibility(View.INVISIBLE);
+                button2.setVisibility(View.INVISIBLE);
+                button3.setVisibility(View.INVISIBLE);
+
 
 
             }
@@ -135,10 +177,19 @@ public void newQuestion()
 
 
     }
+
+    private void soundFinish() {
+        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.finished);
+        mediaPlayer.start();
+    }
+
     public void sound()
     {
-       // MediaPlayer mediaPlayer= MediaPlayer.create(getApplicationContext(),R.raw.counter);
+        {
+            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.counter);
+            mediaPlayer.start();
 
-
+        }
     }
+
 }
